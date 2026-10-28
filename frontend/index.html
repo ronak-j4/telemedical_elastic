@@ -56,6 +56,11 @@
       <a href="#payments" class="nav-link" data-nav="payments">
         <i data-lucide="credit-card"></i><span>Payments</span>
       </a>
+
+      <p class="nav-group-label">Intelligence</p>
+      <a href="#elastic" class="nav-link" data-nav="elastic">
+        <i data-lucide="zap"></i><span>Elasticsearch</span>
+      </a>
     </nav>
 
     <div class="sidebar-footer">
@@ -351,6 +356,157 @@
         </div>
       </section>
 
+      <!-- ===================== ELASTICSEARCH ===================== -->
+      <section class="page" id="page-elastic" data-page="elastic">
+
+        <!-- Header bar -->
+        <div class="es-page-header">
+          <div class="es-header-left">
+            <h2>Elasticsearch Engine</h2>
+            <p class="es-subtitle">Four workloads that justify a search-first database alongside Oracle</p>
+          </div>
+          <div class="es-header-right">
+            <span id="esClusterBadge" class="es-badge es-badge--checking">…</span>
+            <button class="btn btn-ghost btn-sm" id="esSyncBtn">↺ Sync</button>
+          </div>
+        </div>
+
+        <!-- Cluster status card -->
+        <div class="es-status-card" id="esClusterDetails">Loading cluster info…</div>
+
+        <!-- Tab bar -->
+        <div class="es-tabs">
+          <button class="es-tab-btn active" data-tab="agg">⚡ Aggregations</button>
+          <button class="es-tab-btn" data-tab="text">🔍 Free Text</button>
+          <button class="es-tab-btn" data-tab="attr">🩺 Doctor Finder</button>
+          <button class="es-tab-btn" data-tab="geo">📍 Geo Proximity</button>
+          <button class="es-tab-btn" data-tab="bench">📊 Benchmark</button>
+        </div>
+
+        <!-- ── TAB 1: AGGREGATIONS ─────────────────────────────────── -->
+        <div class="es-tab-panel active" id="es-tab-agg">
+          <div class="es-workload-intro">
+            <h3>Workload 1 — Dashboard Aggregations</h3>
+            <p>All five dashboard GROUP-BY queries execute in a <strong>single</strong> Elasticsearch aggregation round-trip
+               — no repeated full-table scans on Oracle.</p>
+          </div>
+          <div class="es-agg-grid" id="esAggGrid">
+            <div class="es-loading"><span class="spinner"></span> Loading aggregations…</div>
+          </div>
+          <div id="esAggDsl"></div>
+        </div>
+
+        <!-- ── TAB 2: FREE TEXT ────────────────────────────────────── -->
+        <div class="es-tab-panel" id="es-tab-text">
+          <div class="es-workload-intro">
+            <h3>Workload 2 — Free Text Search</h3>
+            <p>BM25 relevance ranking, fuzzy matching and <mark>hit highlighting</mark> on clinical text.
+               Oracle can only do slow full-table <code>LIKE '%…%'</code> scans.</p>
+          </div>
+
+          <!-- Medical Records -->
+          <div class="es-sub-section">
+            <h4>🩺 Medical Records (Symptoms &amp; Diagnoses)</h4>
+            <form class="es-form" id="esMedicalSearchForm">
+              <input class="input-field" id="esMedicalQuery" type="text"
+                     placeholder="e.g. chest pain, fever, hypertension, insomnia…" autocomplete="off" />
+              <select class="select-field" id="esMedicalCity">
+                <option value="">All Cities</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Pune">Pune</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Bengaluru">Bengaluru</option>
+                <option value="Chennai">Chennai</option>
+              </select>
+              <button class="btn btn-primary" type="submit">Search Records</button>
+            </form>
+            <div id="esMedicalResults"></div>
+          </div>
+
+          <!-- Feedback -->
+          <div class="es-sub-section">
+            <h4>💬 Patient Feedback Comments</h4>
+            <form class="es-form" id="esFeedbackSearchForm">
+              <input class="input-field" id="esFeedbackQuery" type="text"
+                     placeholder="e.g. thorough, empathy, on time, connection issue…" autocomplete="off" />
+              <select class="select-field" id="esFeedbackSentiment">
+                <option value="">Any Sentiment</option>
+                <option value="POSITIVE">😊 Positive</option>
+                <option value="NEUTRAL">😐 Neutral</option>
+                <option value="CRITICAL">😞 Critical</option>
+              </select>
+              <select class="select-field" id="esFeedbackRating">
+                <option value="">Any Rating</option>
+                <option value="5">★★★★★ 5 only</option>
+                <option value="4">★★★★☆ 4+</option>
+                <option value="3">★★★☆☆ 3+</option>
+              </select>
+              <button class="btn btn-primary" type="submit">Search Feedback</button>
+            </form>
+            <div id="esFeedbackResults"></div>
+          </div>
+        </div>
+
+        <!-- ── TAB 3: DOCTOR ATTRIBUTE LOOKUP ─────────────────────── -->
+        <div class="es-tab-panel" id="es-tab-attr">
+          <div class="es-workload-intro">
+            <h3>Workload 3 — Doctor Attribute Lookup</h3>
+            <p>Find doctors by specialization, experience, rating and city — all from a <strong>single denormalized document</strong>.
+               Oracle requires 5 JOINs across <code>DOCTOR</code>, <code>DOCTOR_SPECIALIZATION</code>,
+               <code>DOCTOR_RATING</code>, <code>HOSPITAL_DOCTOR</code> and <code>HOSPITAL</code>.</p>
+          </div>
+          <form class="es-form es-form-grid" id="esDoctorSearchForm">
+            <input class="input-field" id="esDoctorQuery" type="text" placeholder="Name or license…" autocomplete="off" />
+            <select class="select-field" id="esDoctorSpec">
+              <option value="">Any Specialization</option>
+            </select>
+            <input class="input-field" id="esDoctorMinExp" type="number" min="0" max="40" placeholder="Min Experience (yrs)" />
+            <input class="input-field" id="esDoctorMinRating" type="number" min="1" max="5" step="0.5" placeholder="Min Rating (1-5)" />
+            <input class="input-field" id="esDoctorCity" type="text" placeholder="City (Mumbai, Pune…)" autocomplete="off" />
+            <input class="input-field" id="esDoctorHospital" type="text" placeholder="Hospital name…" autocomplete="off" />
+            <button class="btn btn-primary" type="submit">Find Doctors</button>
+          </form>
+          <div id="esDoctorResults"></div>
+        </div>
+
+        <!-- ── TAB 4: GEO PROXIMITY ────────────────────────────────── -->
+        <div class="es-tab-panel" id="es-tab-geo">
+          <div class="es-workload-intro">
+            <h3>Workload 4 — Geo-Proximity Hospital Finder</h3>
+            <p>Elasticsearch <code>geo_point</code> + <code>geo_distance</code> filter finds hospitals
+               within a radius and sorts by actual distance. Oracle Free Edition has no spatial index — it can only match by city name.</p>
+          </div>
+
+          <div class="es-geo-presets">
+            <p>📌 Quick-pick city:</p>
+            <div id="esCityPresets" class="es-preset-buttons"></div>
+          </div>
+
+          <form class="es-form" id="esGeoSearchForm">
+            <input class="input-field" id="esGeoLat" type="number" step="any" placeholder="Latitude (e.g. 19.0760)" />
+            <input class="input-field" id="esGeoLon" type="number" step="any" placeholder="Longitude (e.g. 72.8777)" />
+            <input class="input-field" id="esGeoRadius" type="number" step="any" value="15" min="1" max="500" placeholder="Radius km" />
+            <select class="select-field" id="esGeoSpecialty">
+              <option value="">Any Specialty</option>
+            </select>
+            <button class="btn btn-primary" type="submit">Find Nearby Hospitals</button>
+          </form>
+          <div id="esGeoResults"></div>
+        </div>
+
+        <!-- ── TAB 5: BENCHMARK ────────────────────────────────────── -->
+        <div class="es-tab-panel" id="es-tab-bench">
+          <div class="es-workload-intro">
+            <h3>Oracle SQL vs. Elasticsearch — Side-by-Side Benchmark</h3>
+            <p>Runs each workload against both engines and measures real wall-clock duration.
+               Click <em>Details</em> on any row to see the actual SQL vs. DSL queries and the architectural explanation.</p>
+          </div>
+          <button class="btn btn-primary" id="esBenchmarkBtn">▶ Run Benchmark</button>
+          <div id="esBenchmarkResults" style="margin-top: 1.5rem;"></div>
+        </div>
+
+      </section>
+
     </main>
   </div>
 
@@ -386,6 +542,7 @@
   <script src="js/pages/medicines.js"></script>
   <script src="js/pages/tests.js"></script>
   <script src="js/pages/payments.js"></script>
+  <script src="js/pages/elastic.js"></script>
   <script src="js/router.js"></script>
   <script src="js/app.js"></script>
 </body>

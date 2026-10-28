@@ -19,6 +19,7 @@ const PAGE_META = {
   medicines: { title: 'Medicines', crumb: 'Medicines', search: true, placeholder: 'Search medicines…' },
   tests: { title: 'Tests', crumb: 'Tests', search: true, placeholder: 'Search tests…' },
   payments: { title: 'Payments', crumb: 'Payments', search: true, placeholder: 'Search payments…' },
+  elastic: { title: 'Elasticsearch', crumb: 'Elasticsearch', search: false },
 };
 
 const HMD_ROUTER = {

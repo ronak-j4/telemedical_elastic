@@ -28,7 +28,7 @@ public class DoctorRepository {
         d.setGender(rs.getString("gender"));
         d.setDateJoined(rs.getDate("date_joined") != null ? rs.getDate("date_joined").toLocalDate() : null);
         d.setLicenseNumber(rs.getString("license_no"));
-        d.setExperience((Integer) rs.getObject("experience"));
+        d.setExperience(rs.getObject("experience") != null ? ((Number) rs.getObject("experience")).intValue() : null);
         return d;
     };
 

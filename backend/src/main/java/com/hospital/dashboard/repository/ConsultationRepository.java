@@ -21,7 +21,7 @@ public class ConsultationRepository {
     }
 
     private static final String SELECT_ALL =
-            "SELECT consultation_id, patient_id, doctor_id, booking_date, "Date", start_time, end_time, " +
+            "SELECT consultation_id, patient_id, doctor_id, booking_date, \"Date\", start_time, end_time, " +
             "status, consultation_mode, video_link, call_number, chat_transcript_id FROM consultation";
 
     private static final RowMapper<Consultation> ROW_MAPPER = (rs, rowNum) -> {
@@ -53,7 +53,7 @@ public class ConsultationRepository {
         Long id = jdbcTemplate.queryForObject("SELECT seq_consultation.NEXTVAL FROM dual", Long.class);
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO consultation (consultation_id, patient_id, doctor_id, booking_date, "Date", start_time, end_time, status, consultation_mode, video_link, call_number, chat_transcript_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    "INSERT INTO consultation (consultation_id, patient_id, doctor_id, booking_date, \"Date\", start_time, end_time, status, consultation_mode, video_link, call_number, chat_transcript_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setLong(1, id);
             ps.setLong(2, c.getPatientId());
             ps.setLong(3, c.getDoctorId());
@@ -75,7 +75,7 @@ public class ConsultationRepository {
 
     public int update(Long id, Consultation c) {
         return jdbcTemplate.update(
-                "UPDATE consultation SET patient_id = ?, doctor_id = ?, booking_date = ?, "Date" = ?, start_time = ?, end_time = ?, status = ?, consultation_mode = ?, video_link = ?, call_number = ?, chat_transcript_id = ? WHERE consultation_id = ?",
+                "UPDATE consultation SET patient_id = ?, doctor_id = ?, booking_date = ?, \"Date\" = ?, start_time = ?, end_time = ?, status = ?, consultation_mode = ?, video_link = ?, call_number = ?, chat_transcript_id = ? WHERE consultation_id = ?",
                 c.getPatientId(), c.getDoctorId(),
                 c.getBookingDate() != null ? Date.valueOf(c.getBookingDate()) : null,
                 c.getDate() != null ? Date.valueOf(c.getDate()) : null,
